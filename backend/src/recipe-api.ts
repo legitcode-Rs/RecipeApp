@@ -1,20 +1,23 @@
-const apiKey = process.env.API_KEY; 
 
-//
-export const searchRecipes = async(serchTerm:string, page:number) =>{
-    if (!apiKey){
-        throw new Error ("Api Key not found")
+require('dotenv').config();
+
+const apiKey = process.env.API_KEY;
+
+export const searchRecipes = async (searchTerm: string, page: number) => {
+    if (!apiKey) {
+        throw new Error ("Api Key not found");
     }
 
     // Receipe end point
     const url = new URL("https://api.spoonacular.com/recipes/complexSearch");
 
     const queryParams = {
-        apiKey: apiKey,
-        query: serchTerm,
+        apiKey,
+        query: searchTerm,
         number: "10",
-        offset: (page * 10 ).toString()
-    }
+        offset: (page * 10 ).toString(),
+    };
+    
     url.search = new URLSearchParams(queryParams).toString()
 
     try {
@@ -22,7 +25,7 @@ export const searchRecipes = async(serchTerm:string, page:number) =>{
         const resultsJson = await searchResponse.json();
         return resultsJson;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 };
 
